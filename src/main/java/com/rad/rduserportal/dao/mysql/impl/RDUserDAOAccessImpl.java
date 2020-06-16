@@ -1,14 +1,13 @@
-package com.rad.rduserportal.dao.mysql;
+package com.rad.rduserportal.dao.mysql.impl;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.rad.rduserportal.dao.entity.RDUser;
+import com.rad.rduserportal.dao.mysql.RDUserDAOAccess;
 
-@Transactional
 @Repository
 public class RDUserDAOAccessImpl implements RDUserDAOAccess {
 

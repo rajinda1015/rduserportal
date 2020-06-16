@@ -14,6 +14,7 @@ public class RDUserDTO implements Serializable {
 	private String lastName;
 	private String middleName;
 	private Date createDate;
+	private int status;
 	private List<RDRoleDTO> userRoles;
 
 	public long getUserDid() {
@@ -62,6 +63,14 @@ public class RDUserDTO implements Serializable {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public List<RDRoleDTO> getUserRoles() {

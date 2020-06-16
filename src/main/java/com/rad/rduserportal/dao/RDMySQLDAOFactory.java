@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 import com.rad.rduserportal.dao.RDDAOFactory;
 import com.rad.rduserportal.dao.mysql.RDCompanyDAOAccess;
+import com.rad.rduserportal.dao.mysql.RDLoginDAOAccess;
+import com.rad.rduserportal.dao.mysql.RDRoleDAOAccess;
 import com.rad.rduserportal.dao.mysql.RDUserDAOAccess;
 
 @Component
@@ -16,6 +18,12 @@ public class RDMySQLDAOFactory extends RDDAOFactory {
 	@Autowired
 	private RDCompanyDAOAccess rDCompanyDAOAccess;
 	
+	@Autowired
+	private RDRoleDAOAccess rDRoleDAOAccess;
+	
+	@Autowired
+	private RDLoginDAOAccess rDLoginDAOAccess;
+	
 	@Override
 	public RDUserDAOAccess getRDUserDAOAccess() {
 		return rDUserDAOAccess;
@@ -24,5 +32,15 @@ public class RDMySQLDAOFactory extends RDDAOFactory {
 	@Override
 	public RDCompanyDAOAccess getRDCompanyDAOAccess() {
 		return rDCompanyDAOAccess;
+	}
+	
+	@Override
+	public RDRoleDAOAccess getRDRoleDAOAccess() {
+		return rDRoleDAOAccess;
+	}
+
+	@Override
+	public RDLoginDAOAccess getRDLoginDAOAccess() {
+		return rDLoginDAOAccess;
 	}
 }

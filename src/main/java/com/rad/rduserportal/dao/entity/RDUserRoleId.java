@@ -1,35 +1,54 @@
 package com.rad.rduserportal.dao.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 
 @Embeddable
 public class RDUserRoleId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private RDUser user;
-	private RDRole role;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	public RDUser getUser() {
-		return user;
+	private Long userDid;
+	private Long roleDid;
+	
+	public RDUserRoleId() {}
+	
+	public RDUserRoleId(Long userDid, Long roleDid) {
+		this.userDid = userDid;
+		this.roleDid = roleDid;
 	}
 
-	public void setUser(RDUser user) {
-		this.user = user;
+	public Long getUserDid() {
+		return userDid;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	public RDRole getRole() {
-		return role;
+	public void setUserDid(Long userDid) {
+		this.userDid = userDid;
 	}
 
-	public void setRole(RDRole role) {
-		this.role = role;
+	public Long getRoleDid() {
+		return roleDid;
+	}
+
+	public void setRoleDid(Long roleDid) {
+		this.roleDid = roleDid;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (null == obj) { return false; }
+		if (!(obj instanceof RDUserRoleId)) { return false; }
+		
+		if (this == obj) { return true; }
+		
+		RDUserRoleId urId = (RDUserRoleId) obj;
+		return Objects.equals(userDid, urId.userDid) && Objects.equals(roleDid, urId.roleDid);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(userDid, roleDid);
+	}
 }

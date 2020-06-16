@@ -36,12 +36,9 @@ public class RDUserPortalResourceServer extends ResourceServerConfigurerAdapter 
 		httpSecurity
 					.anonymous().disable()
 					.authorizeRequests()
-					.antMatchers("/userportal/admin/**").access("hasRole('ADMIN')")
-					.antMatchers("/userportal/user/**").access("hasRole('USER')")
-					.antMatchers("/userportal/user/**").access("hasRole('ADMIN')")
-					.antMatchers("/visit/**").access("hasRole('VISITOR')")
-					.antMatchers("/visit/**").access("hasRole('USER')")
-					.antMatchers("/visit/**").access("hasRole('ADMIN')")
+					.antMatchers("/userportal/admin/**").hasRole("ADMIN")
+					.antMatchers("/userportal/user/**").hasAnyRole("ADMIN","USER")
+					.antMatchers("/visit/**").hasAnyRole("ADMIN","USER","VISITOR")
 					.and()
 					.exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
 	}

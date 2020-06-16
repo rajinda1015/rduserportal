@@ -1,10 +1,11 @@
 package com.rad.rduserportal.dao.entity;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,14 +17,12 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "RD_ROLE")
-public class RDRole implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class RDRole {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ROLE_DID")
-	private long roleDid;
+	private Long id;
 	
 	@Column(name = "ROLE_NAME")
 	private String roleName;
@@ -40,28 +39,29 @@ public class RDRole implements Serializable {
 	@Version
 	@Column(name = "version")
 	private Integer version;
-
-	@OneToMany(mappedBy = "role")
-	private Set<RDUserRole> userRoles = new HashSet<RDUserRole>();
-
-	public Set<RDUserRole> getUserRoles() {
-		return userRoles;
-	}
-
-	public void setUserRoles(Set<RDUserRole> userRoles) {
-		this.userRoles = userRoles;
-	}
 	
-	public void addUserRole(RDUserRole userRole) {
-		this.userRoles.add(userRole);
+	@OneToMany(
+			mappedBy = "role",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<RDUserRole> userRoles = new ArrayList<RDUserRole>();
+
+	public RDRole() {}
+	
+	public RDRole(Long roleDid, String roleName, String description, int status, Date createDate) {
+		this.id = roleDid;
+		this.roleName = roleName;
+		this.description = description;
+		this.status = status;
+		this.createDate = createDate;
 	}
 
-	public long getRoleDid() {
-		return roleDid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setRoleDid(long roleDid) {
-		this.roleDid = roleDid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getRoleName() {
@@ -104,4 +104,27 @@ public class RDRole implements Serializable {
 		this.version = version;
 	}
 
+	public List<RDUserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(List<RDUserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (null == obj) { return false; }
+		if (!(obj instanceof RDRole)) { return false; }
+		
+		if (this == obj) { return true; }
+		
+		RDRole rr = (RDRole) obj;
+		return Objects.equals(id, rr.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

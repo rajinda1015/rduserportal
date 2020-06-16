@@ -1,8 +1,10 @@
-package com.rad.rduserportal.dao.mysql;
+package com.rad.rduserportal.dao.mysql.impl;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
+
+import com.rad.rduserportal.dao.mysql.RDCompanyDAOAccess;
 
 @Transactional
 @Repository

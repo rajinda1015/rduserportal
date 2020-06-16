@@ -1,10 +1,12 @@
 package com.rad.rduserportal.dao.entity;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,14 +18,12 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "RD_USER")
-public class RDUser implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class RDUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_DID")
-	private long Id;
+	private Long id;
 	
 	@Column(name = "FIRST_NAME")
 	private String firstName;
@@ -39,32 +39,45 @@ public class RDUser implements Serializable {
 	
 	@Column(name = "CREATE_DATE")
 	private Date createDate;
+	
+	@Column(name = "UPDATE_DATE")
+	private Date updateDate;
+	
+	@Column(name = "STATUS")
+	private Integer status;
 
 	@Version
 	@Column(name = "version")
 	private Integer version;
 
-	@OneToMany(mappedBy = "user")
-	private Set<RDUserRole> userRoles = new HashSet<RDUserRole>();
-
-	public Set<RDUserRole> getUserRoles() {
-		return userRoles;
-	}
+	@OneToMany(
+			mappedBy = "user",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<RDUserRole> userRoles = new ArrayList<RDUserRole>();
 	
-	public void setUserRoles(Set<RDUserRole> userRoles) {
-		this.userRoles = userRoles;
+	public RDUser() {}
+	
+	public RDUser(Long userDid, String firstName, String middleName,
+			String lastName, char gender, Date createDate, Date updateDate,
+			Integer status, Integer version) {
+		this.id = userDid;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.createDate = createDate;
+		this.status = status;
+		this.updateDate = updateDate;
+		this.version = version;
 	}
 
-	public void addUserRole(RDUserRole userRole) {
-		this.userRoles.add(userRole);
+	public Long getId() {
+		return id;
 	}
 
-	public long getId() {
-		return Id;
-	}
-
-	public void setId(long id) {
-		Id = id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {
@@ -107,11 +120,62 @@ public class RDUser implements Serializable {
 		this.createDate = createDate;
 	}
 
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	public Integer getVersion() {
 		return version;
 	}
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+	
+	public void addRole(RDRole role) {
+		RDUserRole userRole = new RDUserRole(this, role, new Date());
+		userRoles.add(userRole);
+		role.getUserRoles().add(userRole);
+	}
+	
+	public void removeRole(RDRole role) {
+		Iterator<RDUserRole> itrUserRoles = userRoles.iterator();
+		while (itrUserRoles.hasNext()) {
+			RDUserRole userRole = itrUserRoles.next();
+			if (userRole.getUser().equals(this) && userRole.getRole().equals(role)) {
+				itrUserRoles.remove();
+				userRole.getRole().getUserRoles().remove(userRole);
+				userRole.setUser(null);
+				userRole.setRole(null);
+			}
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (null == obj) { return false; }
+		if (!(obj instanceof RDUser)) { return false; }
+		
+		if (this == obj) { return true; }
+		
+		RDUser ru = (RDUser) obj;
+		return Objects.equals(id, ru.id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

@@ -1,36 +1,53 @@
 package com.rad.rduserportal.dao.entity;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
-
-@Entity
+@Entity(name = "RDUserRole")
 @Table(name = "RD_USER_ROLE")
-@IdClass(RDUserRoleId.class)
-public class RDUserRole implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class RDUserRole {
 	
-	@Id
-	@ManyToOne
-	@JoinColumn(name = "USER_DID", referencedColumnName = "userDid")
+	@EmbeddedId
+	private RDUserRoleId id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@MapsId("userDid")
+	@JoinColumn(name = "USER_DID")
 	private RDUser user;
 	
-	@Id
-	@ManyToOne
-	@JoinColumn(name = "ROLE_DID", referencedColumnName = "roleDid")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@MapsId("roleDid")
+	@JoinColumn(name = "ROLE_DID")
 	private RDRole role;
-
+	
 	@Column(name = "CREATE_DATE")
 	private Date createDate;
+	
+	public RDUserRole() {}
+	
+	public RDUserRole(RDUser user, RDRole role, Date createDate) {
+		this.user = user;
+		this.role = role;
+		this.createDate = createDate;
+		this.id = new RDUserRoleId(user.getId(), role.getId());
+	}
+
+	public RDUserRoleId getId() {
+		return id;
+	}
+
+	public void setId(RDUserRoleId id) {
+		this.id = id;
+	}
 
 	public RDUser getUser() {
 		return user;
@@ -55,5 +72,20 @@ public class RDUserRole implements Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (null == obj) { return false; }
+		if (!(obj instanceof RDUserRole)) {return false; }
+		
+		if (this == obj) { return true; }
+		
+		RDUserRole rdUR = (RDUserRole) obj;
+		return Objects.equals(user, rdUR.getUser()) && Objects.equals(role, rdUR.getRole()); 
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(user, role);
+	}
 }
