@@ -46,6 +46,7 @@ public class RDContactDAOAccessImpl implements RDContactDAOAccess {
 		return contacts;
 		
 	}
+
 	@Override
 	public void addContactDetails(List<RDContact> contacts) throws Exception {
 		contacts.forEach(contact -> {
@@ -58,6 +59,13 @@ public class RDContactDAOAccessImpl implements RDContactDAOAccess {
 			*/
 			entityManager.persist(contact);
 		});
+	}
+
+	@Override
+	public void deleteContactDetails(List<Long> dids) throws Exception {
+		Query query = entityManager.createQuery("DELETE FROM RDContact WHERE contactDid IN (:dids)");
+		query.setParameter("dids", dids);
+		query.executeUpdate();
 	}
 	
 	@Override

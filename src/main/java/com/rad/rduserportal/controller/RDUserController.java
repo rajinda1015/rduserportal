@@ -70,7 +70,32 @@ public class RDUserController {
 			}
 			
 		} catch (Exception e) {
-			messages.add("Cannot updatecontact details. Error : " + e.getLocalizedMessage());
+			messages.add("Cannot update contact details. Error : " + e.getLocalizedMessage());
+		}
+		
+		return messages;
+	}
+
+	@RequestMapping(value = "/deleteContactDetails", method = RequestMethod.DELETE)
+	public List<String> deleteContactDetails(
+			@RequestParam Map<String, String> paramMap,
+			@RequestBody Long[] dids) throws Exception {
+		LOGGER.info("USERPORTAL : Delete contact details by " + paramMap.get("username"));
+		List<String> messages = new ArrayList<String>();
+		
+		try {
+			List<Long> didList = new ArrayList<Long>();
+			Collections.addAll(didList, dids);
+			boolean result = rDContactService.deleteContactDetails(didList);
+			
+			if (result) {
+				messages.add("Contacts were successfully deleted");
+			} else {
+				messages.add("Cannot delete contacts details");
+			}
+			
+		} catch (Exception e) {
+			messages.add("Cannot delete contact details. Error : " + e.getLocalizedMessage());
 		}
 		
 		return messages;

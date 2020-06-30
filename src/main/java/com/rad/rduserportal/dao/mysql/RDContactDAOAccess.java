@@ -12,4 +12,5 @@ public interface RDContactDAOAccess {
 	public List<RDContact> getContactDetails(List<Long> contactDids) throws Exception;
 	public void addContactDetails(List<RDContact> contacts) throws Exception;
 	public void updateContactDetails(List<RDContact> contacts) throws Exception;
+	public void deleteContactDetails(List<Long> dids) throws Exception;
 }

@@ -56,6 +56,12 @@ public class RDContactServiceImpl implements RDContactService {
 		return true;
 	}
 
+	@Transactional(value = TxType.REQUIRED)
+	public boolean deleteContactDetails(List<Long> dids) throws Exception {
+		rDDAOProxy.getDAOFacory().getRDContactDAOAccess().deleteContactDetails(dids);
+		return true;
+	}
+
 	private List<RDContact> mapContactDetails(List<RDContactDTO> contacts, List<RDContact> persistList) throws Exception {
 		
 		final Map<Long, RDContact> persistMap = new HashMap<Long, RDContact>();
