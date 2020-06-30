@@ -44,7 +44,7 @@ public class RDUser {
 	private Date updateDate;
 	
 	@Column(name = "STATUS")
-	private Integer status;
+	private byte status;
 
 	@Version
 	@Column(name = "version")
@@ -60,7 +60,7 @@ public class RDUser {
 	
 	public RDUser(Long userDid, String firstName, String middleName,
 			String lastName, char gender, Date createDate, Date updateDate,
-			Integer status, Integer version) {
+			byte status, Integer version) {
 		this.id = userDid;
 		this.firstName = firstName;
 		this.middleName = middleName;
@@ -128,11 +128,11 @@ public class RDUser {
 		this.updateDate = updateDate;
 	}
 
-	public Integer getStatus() {
+	public byte getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(byte status) {
 		this.status = status;
 	}
 

@@ -2,8 +2,8 @@ package com.rad.rduserportal.util;
 
 public interface RDUserPortalConstants {
 
-	public static final int INACTIVE = 0;
-	public static final int ACTIVE = 1;
+	public static final byte INACTIVE = 0;
+	public static final byte ACTIVE = 1;
 	
 	public static final int IS_NEW = 1;
 	public static final int IS_UPDATE = 2;

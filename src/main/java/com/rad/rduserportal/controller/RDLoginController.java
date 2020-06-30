@@ -1,7 +1,6 @@
 package com.rad.rduserportal.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rad.rduserportal.dao.entity.RDLogin;
 import com.rad.rduserportal.dto.RDLoginDTO;
 import com.rad.rduserportal.service.RDLoginService;
-import com.rad.rduserportal.util.RDUserPortalConstants;
 
 @RestController
 @RefreshScope
@@ -33,17 +30,15 @@ public class RDLoginController {
 	@RequestMapping(value = "/updateLastLogin", method = RequestMethod.PUT)
 	public List<String> updateLastLogin(
 			@RequestParam Map<String, String> paramMap,
-			@RequestBody RDLoginDTO loginAccount) {
+			@RequestBody RDLoginDTO loginDTO) {
 		
-		LOGGER.info("USERPORTAL : Update last login of " + loginAccount.getUsername() + " by " + paramMap.get("username"));
+		LOGGER.info("USERPORTAL : Update last login of " + loginDTO.getUsername() + " by " + paramMap.get("username"));
 		List<String> messages = new ArrayList<String>();
 		
 		try {
-			RDLogin logAccount = rDLoginService.getLoginAccountByUsername(loginAccount.getUsername());
-			if (null != logAccount) {
-				logAccount.setLastLogin(new Date());
-				rDLoginService.updateLoginAccount(logAccount);
-				messages.add("Last login time is updated for : " + logAccount.getUserDid());
+			boolean result = rDLoginService.updateLastLoginDatetoCurrentDate(loginDTO);
+			if (result) {
+				messages.add("Last login time is updated for : " + loginDTO.getUsername());
 
 			} else {
 				messages.add("Account does not exist");
@@ -59,26 +54,18 @@ public class RDLoginController {
 	@RequestMapping(value = "/createLoginAccountByAdmin", method = RequestMethod.POST)
 	public List<String> createLoginAccountByAdmin(
 			@RequestParam Map<String, String> paramMap,
-			@RequestBody RDLoginDTO loginAccount) {
+			@RequestBody RDLoginDTO loginDTO) {
 		
-		LOGGER.info("USERPORTAL : Create login account to " + loginAccount.getUsername() + " by " + paramMap.get("username"));
+		LOGGER.info("USERPORTAL : Create login account to " + loginDTO.getUsername() + " by " + paramMap.get("username"));
 		List<String> messages = new ArrayList<String>();
 		
 		try {
-			RDLogin logAccount = rDLoginService.getLoginAccountByUsername(loginAccount.getUsername());
-			if (null != logAccount) {
-				messages.add("You are not allowed to proceed with this credentials. Please try with different username and password");
+			boolean result = rDLoginService.createLoginAccount(loginDTO);;
+			if (result) {
+				messages.add("Login account was successfully created");
 
 			} else {
-				logAccount = new RDLogin();
-				logAccount.setUserDid(loginAccount.getUserDid());
-				logAccount.setUsername(loginAccount.getUsername());
-				logAccount.setPassword(loginAccount.getPassword());
-				logAccount.setCreateDate(new Date());
-				logAccount.setStatus(RDUserPortalConstants.ACTIVE);
-				
-				rDLoginService.createLoginAccount(logAccount);
-				messages.add("Login account was successfully created");
+				messages.add("You are not allowed to proceed with this credentials. Please try with different username and password");				
 			}
 			
 			return messages;

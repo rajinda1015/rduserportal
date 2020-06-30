@@ -1,39 +1,78 @@
 package com.rad.rduserportal.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rad.rduserportal.dto.RDContactDTO;
+import com.rad.rduserportal.service.RDContactService;
+
 @RestController
-@RequestMapping(value = "/userportal")
+@RequestMapping(value = "/userportal/user")
 public class RDUserController {
 
 	private static final Logger LOGGER = LogManager.getLogger(RDUserController.class);
-
-	@Autowired
-	private ResourceServerTokenServices tokenService;
 	
-	@RequestMapping(value = "/findUsers", method = RequestMethod.GET)
-	public List<String> findUsers(
-			@RequestParam Map<String, String> paramMap) throws Exception {
-		LOGGER.info("USERPORTAL : Find users by " + paramMap.get("username"));
+	@Autowired
+	private RDContactService rDContactService;
+	
+	@RequestMapping(value = "/addContactDetails", method = RequestMethod.POST)
+	public List<String> addContactDetails(
+			@RequestParam Map<String, String> paramMap,
+			@RequestBody RDContactDTO[] contacts) throws Exception {
+		LOGGER.info("USERPORTAL : Add contact details by " + paramMap.get("username"));
+		List<String> messages = new ArrayList<String>();
 		
-		List<String> list = new ArrayList<String>();
-		list.add("User 01");
-		list.add("User 02");
-		list.add("User 03");
-		list.add("User 04");
-		list.add("User 05");
+		try {
+			List<RDContactDTO> conList = new ArrayList<RDContactDTO>();
+			Collections.addAll(conList, contacts);
+			boolean result = rDContactService.addContactDetails(conList);
+			
+			if (result) {
+				messages.add("Contacts were successfully added");
+			} else {
+				messages.add("Cannot insert contacts details");
+			}
+			
+		} catch (Exception e) {
+			messages.add("Cannot add contact details. Error : " + e.getLocalizedMessage());
+		}
 		
-		return list;
+		return messages;
+	}
+	
+	@RequestMapping(value = "/updateContactDetails", method = RequestMethod.PUT)
+	public List<String> updateContactDetails(
+			@RequestParam Map<String, String> paramMap,
+			@RequestBody RDContactDTO[] contacts) throws Exception {
+		LOGGER.info("USERPORTAL : Update contact details by " + paramMap.get("username"));
+		List<String> messages = new ArrayList<String>();
+		
+		try {
+			List<RDContactDTO> conList = new ArrayList<RDContactDTO>();
+			Collections.addAll(conList, contacts);
+			boolean result = rDContactService.updateContactDetails(conList);
+			
+			if (result) {
+				messages.add("Contacts were successfully updated");
+			} else {
+				messages.add("Cannot update contacts details");
+			}
+			
+		} catch (Exception e) {
+			messages.add("Cannot updatecontact details. Error : " + e.getLocalizedMessage());
+		}
+		
+		return messages;
 	}
 }

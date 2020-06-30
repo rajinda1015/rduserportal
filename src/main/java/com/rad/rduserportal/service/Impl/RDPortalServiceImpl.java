@@ -1,5 +1,7 @@
 package com.rad.rduserportal.service.Impl;
 
+import java.util.Date;
+
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
@@ -8,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.rad.rduserportal.dao.RDDAOProxy;
 import com.rad.rduserportal.dao.entity.RDUser;
+import com.rad.rduserportal.dto.RDUserDTO;
 import com.rad.rduserportal.service.RDPortalService;
+import com.rad.rduserportal.util.RDUserPortalConstants;
 
 @Service
 public class RDPortalServiceImpl implements RDPortalService {
@@ -23,13 +27,40 @@ public class RDPortalServiceImpl implements RDPortalService {
 	
 	@Transactional(value = TxType.REQUIRED)
 	@Override
-	public void addUser(RDUser user) throws Exception {
+	public boolean addUser(RDUserDTO userDTO) throws Exception {
+		RDUser user = mapUserByDTO(userDTO, new RDUser());
 		rDDAOProxy.getDAOFacory().getRDUserDAOAccess().addUser(user);
+		userDTO.setUserDid(user.getId());
+		return true;
 	}
 	
 	@Transactional(value = TxType.REQUIRED)
 	@Override
-	public void updateUser(RDUser user) throws Exception {
-		rDDAOProxy.getDAOFacory().getRDUserDAOAccess().updateUser(user);
+	public boolean updateUser(RDUserDTO userDTO) throws Exception {
+		RDUser persistUser = rDDAOProxy.getDAOFacory().getRDUserDAOAccess().getUser(userDTO.getUserDid());
+		if (null != persistUser) {
+			mapUserByDTO(userDTO, persistUser);
+			rDDAOProxy.getDAOFacory().getRDUserDAOAccess().updateUser(persistUser);
+			return true;
+		}
+		return false;
+	}
+	
+	private RDUser mapUserByDTO(RDUserDTO userDTO, RDUser persistUser) throws Exception {
+		
+		if (null != userDTO.getUserDid() && userDTO.getUserDid() > 0) { 
+			persistUser.setId(userDTO.getUserDid());
+			persistUser.setUpdateDate(new Date());
+			persistUser.setStatus(userDTO.getStatus());
+		} else {
+			persistUser.setCreateDate(new Date());
+			persistUser.setStatus(RDUserPortalConstants.ACTIVE);
+		}
+		persistUser.setFirstName(userDTO.getFirstName());
+		persistUser.setMiddleName(userDTO.getMiddleName());
+		persistUser.setLastName(userDTO.getLastName());
+		persistUser.setGender(userDTO.getGender());
+		
+		return persistUser;
 	}
 }

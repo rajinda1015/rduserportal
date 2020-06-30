@@ -25,8 +25,4 @@ public class RDRoleDAOAccessImpl implements RDRoleDAOAccess {
 		entityManager.persist(userRole);
 	}
 	
-	@Override
-	public void revokeUserRole(RDUserRole userRole) throws Exception {
-		entityManager.remove(userRole);
-	}
 }

@@ -8,20 +8,20 @@ public class RDUserDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long userDid;
+	private Long userDid;
 	private String firstName;
 	private char gender;
 	private String lastName;
 	private String middleName;
 	private Date createDate;
-	private int status;
+	private byte status;
 	private List<RDRoleDTO> userRoles;
 
-	public long getUserDid() {
+	public Long getUserDid() {
 		return userDid;
 	}
 
-	public void setUserDid(long userDid) {
+	public void setUserDid(Long userDid) {
 		this.userDid = userDid;
 	}
 
@@ -65,11 +65,11 @@ public class RDUserDTO implements Serializable {
 		this.createDate = createDate;
 	}
 
-	public int getStatus() {
+	public byte getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(byte status) {
 		this.status = status;
 	}
 

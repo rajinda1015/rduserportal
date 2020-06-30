@@ -23,7 +23,7 @@ public class RDLogin {
 	private String password;
 	
 	@Column(name = "STATUS")
-	private Integer status;
+	private byte status;
 	
 	@Column(name = "USERNAME")
 	private String username;
@@ -62,11 +62,11 @@ public class RDLogin {
 		this.password = password;
 	}
 
-	public Integer getStatus() {
+	public byte getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(byte status) {
 		this.status = status;
 	}
 

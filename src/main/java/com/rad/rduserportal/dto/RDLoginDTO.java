@@ -2,22 +2,13 @@ package com.rad.rduserportal.dto;
 
 import java.io.Serializable;
 
-public class RDLoginDTO implements Serializable {
+public class RDLoginDTO extends RDUserDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long userDid;
 	private String username;
 	private String password;
 	private String confimPwd;
-
-	public Long getUserDid() {
-		return userDid;
-	}
-
-	public void setUserDid(Long userDid) {
-		this.userDid = userDid;
-	}
 
 	public String getUsername() {
 		return username;
