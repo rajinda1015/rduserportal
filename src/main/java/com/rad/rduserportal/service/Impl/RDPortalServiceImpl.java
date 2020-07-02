@@ -30,14 +30,14 @@ public class RDPortalServiceImpl implements RDPortalService {
 	public boolean addUser(RDUserDTO userDTO) throws Exception {
 		RDUser user = mapUserByDTO(userDTO, new RDUser());
 		rDDAOProxy.getDAOFacory().getRDUserDAOAccess().addUser(user);
-		userDTO.setUserDid(user.getId());
+		userDTO.setDid(user.getId());
 		return true;
 	}
 	
 	@Transactional(value = TxType.REQUIRED)
 	@Override
 	public boolean updateUser(RDUserDTO userDTO) throws Exception {
-		RDUser persistUser = rDDAOProxy.getDAOFacory().getRDUserDAOAccess().getUser(userDTO.getUserDid());
+		RDUser persistUser = rDDAOProxy.getDAOFacory().getRDUserDAOAccess().getUser(userDTO.getDid());
 		if (null != persistUser) {
 			mapUserByDTO(userDTO, persistUser);
 			rDDAOProxy.getDAOFacory().getRDUserDAOAccess().updateUser(persistUser);
@@ -48,8 +48,8 @@ public class RDPortalServiceImpl implements RDPortalService {
 	
 	private RDUser mapUserByDTO(RDUserDTO userDTO, RDUser persistUser) throws Exception {
 		
-		if (null != userDTO.getUserDid() && userDTO.getUserDid() > 0) { 
-			persistUser.setId(userDTO.getUserDid());
+		if (null != userDTO.getDid() && userDTO.getDid() > 0) { 
+			persistUser.setId(userDTO.getDid());
 			persistUser.setUpdateDate(new Date());
 			persistUser.setStatus(userDTO.getStatus());
 		} else {

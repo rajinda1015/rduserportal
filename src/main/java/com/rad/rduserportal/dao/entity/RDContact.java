@@ -3,14 +3,14 @@ package com.rad.rduserportal.dao.entity;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -26,7 +26,7 @@ public class RDContact {
 	@Column(name = "USER_DID")
 	private Long userDid;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE_DID", referencedColumnName = "TYPE_DID")
 	private RDXContactType contactType;
 	
@@ -41,6 +41,9 @@ public class RDContact {
 	
 	@Column(name="CREATE_DATE")
 	private Date createDate;
+	
+	@Column(name="UPDATE_DATE")
+	private Date updateDate;
 	
 	@Version
 	@Column(name="VERSION")
@@ -100,6 +103,14 @@ public class RDContact {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public Integer getVersion() {

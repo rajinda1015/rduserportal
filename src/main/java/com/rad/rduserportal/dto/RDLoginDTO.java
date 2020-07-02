@@ -1,10 +1,7 @@
 package com.rad.rduserportal.dto;
 
-import java.io.Serializable;
 
-public class RDLoginDTO extends RDUserDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class RDLoginDTO extends RDUserDTO {
 
 	private String username;
 	private String password;

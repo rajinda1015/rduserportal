@@ -48,7 +48,7 @@ public class RDLoginServiceImpl implements RDLoginService {
 	@Override
 	public boolean updateLoginAccountStatus(RDLoginDTO loginDTO) throws Exception {
 		RDSearchDTO searchDTO = new RDSearchDTO();
-		searchDTO.setUserDid(loginDTO.getUserDid());
+		searchDTO.setUserDid(loginDTO.getDid());
 		
 		RDLogin loginAccount = rDDAOProxy.getDAOFacory().getRDLoginDAOAccess().getLoginAccount(searchDTO);
 		if (null != loginAccount) {
@@ -64,8 +64,8 @@ public class RDLoginServiceImpl implements RDLoginService {
 	@Override
 	public boolean createLoginAccount(RDLoginDTO loginDTO) throws Exception {
 		RDSearchDTO searchDTO = new RDSearchDTO();
-		if (null != loginDTO.getUserDid() && loginDTO.getUserDid() > 0) {
-			searchDTO.setUserDid(loginDTO.getUserDid());
+		if (null != loginDTO.getDid() && loginDTO.getDid() > 0) {
+			searchDTO.setUserDid(loginDTO.getDid());
 		} else if (null != loginDTO.getUsername() && !loginDTO.getUsername().trim().isEmpty()) {
 			searchDTO.setUserName(loginDTO.getUsername());
 		} else {
@@ -78,7 +78,7 @@ public class RDLoginServiceImpl implements RDLoginService {
 		}
 		
 		logAccount = new RDLogin();
-		logAccount.setUserDid(loginDTO.getUserDid());
+		logAccount.setUserDid(loginDTO.getDid());
 		logAccount.setUsername(loginDTO.getUsername());
 		logAccount.setPassword(loginDTO.getPassword());
 		logAccount.setCreateDate(new Date());
@@ -94,7 +94,7 @@ public class RDLoginServiceImpl implements RDLoginService {
 		rDPortalService.addUser(loginDTO);
 		
 		RDLogin loginAccount = new RDLogin();
-		loginAccount.setUserDid(loginDTO.getUserDid());
+		loginAccount.setUserDid(loginDTO.getDid());
 		loginAccount.setUsername(loginDTO.getUsername());
 		loginAccount.setPassword(loginDTO.getPassword());
 		loginAccount.setCreateDate(new Date());

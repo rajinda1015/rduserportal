@@ -74,22 +74,27 @@ public class RDContactServiceImpl implements RDContactService {
 			
 			if (!persistMap.isEmpty()) {
 				persistContact = persistMap.get(cont.getDid());
+				persistContact.setStatus(cont.getStatus());
+				persistContact.setUpdateDate(new Date());
 			} else {
 				persistContact = new RDContact();
+				persistContact.setUserDid(cont.getUserDid());
+				persistContact.setStatus(RDUserPortalConstants.ACTIVE);
+				persistContact.setCreateDate(new Date());
 			}
 
-			persistContact.setUserDid(cont.getUserDid());
 			persistContact.setContactValue(cont.getValue());
 			persistContact.setIsDefault(cont.getDefaultValue());
-			persistContact.setStatus(RDUserPortalConstants.ACTIVE);
-			persistContact.setCreateDate(new Date());
 			
-			RDXContactType conType;
-			try {
-				conType = rDUserPortalUtility.loadContactMasterDetails().get(cont.getType());
-				persistContact.setContactType(conType);
-			} catch (Exception e) {
-				persistContact.setContactType(null);
+			if (null == persistContact.getContactType() ||
+					(null != persistContact.getContactType() && !persistContact.getContactType().getTypeDid().equals(cont.getType()))) {
+				RDXContactType conType;
+				try {
+					conType = rDUserPortalUtility.loadContactMasterDetails().get(cont.getType());
+					persistContact.setContactType(conType);
+				} catch (Exception e) {
+					persistContact.setContactType(null);
+				}
 			}
 			persistList.add(persistContact);
 		});

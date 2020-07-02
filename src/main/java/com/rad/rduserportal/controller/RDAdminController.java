@@ -135,7 +135,7 @@ public class RDAdminController {
 			@RequestParam Map<String, String> paramMap,
 			@RequestBody RDLoginDTO loginDTO) {
 		
-		LOGGER.info("USERPORTAL : Update status of login account of: " + loginDTO.getUserDid() + " by " + paramMap.get("username"));
+		LOGGER.info("USERPORTAL : Update status of login account of: " + loginDTO.getDid() + " by " + paramMap.get("username"));
 		List<String> messages = new ArrayList<String>();
 		
 		try {
